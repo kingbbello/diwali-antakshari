@@ -610,10 +610,11 @@ document.addEventListener('keydown', e=>{
   const ok = await loadSetlist();
   if(!saved){ state = migrate() || defaults(); normalize(); }
   if(!ok && !saved) toast('Couldn’t load setlist.json. Open Host setup to add songs.');
-  if(state.pos >= state.order.length) phase = 'done';
+  phase = (state.order.length && state.pos >= state.order.length) ? 'done' : 'ready';
   renderAll(); cueCurrent(); if(drawerOpen()) renderSetup();
 })();
-if(state.pos >= state.order.length) phase = 'done';
+// Before setlist.json arrives there may be no songs yet; that is not a finished game.
+if(state.order.length && state.pos >= state.order.length) phase = 'done';
 renderAll();
 </script>
 </body>
