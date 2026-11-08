@@ -1,0 +1,628 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diwali Antakshari Night</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Yatra+One&family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: a TV-first party screen. Big curtained stage on the left, scoreboard on the right,
+   host setup slides in as a drawer from the right so the stage stays visible for rehearsal. */
+:root{
+  --night:#150f2c; --night-2:#1f1843; --night-3:#2c2360; --line:#40367a;
+  --marigold:#f6a821; --saffron:#ff7a1a; --diya:#ffd889; --rose:#e8507f; --teal:#34c6b4;
+  --ink:#fbf3e4; --muted:#b6abd8; --danger:#ff6b6b;
+  --display:"Yatra One", Georgia, "Times New Roman", serif;
+  --body:"Hind", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:var(--body); font-size:16px; color:var(--ink);
+  background:
+    radial-gradient(60rem 30rem at 15% -10%, rgba(246,168,33,.16), transparent 60%),
+    radial-gradient(50rem 30rem at 110% 110%, rgba(232,80,127,.14), transparent 60%),
+    var(--night);
+  padding-left:max(16px, env(safe-area-inset-left,0px));
+  padding-right:max(16px, env(safe-area-inset-right,0px));
+  padding-block:16px;
+}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--diya); outline-offset:2px}
+
+.app{max-width:1500px; margin:0 auto; display:flex; flex-direction:column; gap:14px; min-height:calc(100% - 0px)}
+
+/* Top bar */
+.top{display:flex; align-items:center; gap:16px; flex-wrap:wrap}
+.brand{display:flex; align-items:center; gap:12px; margin-right:auto}
+.diya{width:38px; height:38px; flex:none}
+.brand h1{font-family:var(--display); font-weight:400; font-size:clamp(1.4rem,2.4vw,2rem); margin:0; letter-spacing:.01em; line-height:1}
+.brand h1 span{color:var(--marigold)}
+.counter{font-variant-numeric:tabular-nums; color:var(--muted); font-weight:600; letter-spacing:.06em; text-transform:uppercase; font-size:.85rem}
+.btn{border:1px solid var(--line); background:var(--night-2); border-radius:10px; padding:.55em 1em; font-weight:600; display:inline-flex; align-items:center; gap:.5em; line-height:1.1}
+.btn:hover{background:var(--night-3)}
+.btn.primary{background:linear-gradient(180deg,var(--marigold),var(--saffron)); color:#2a1300; border-color:transparent; box-shadow:0 6px 24px -8px rgba(255,122,26,.7)}
+.btn.primary:hover{filter:brightness(1.07)}
+.btn.ghost{background:transparent}
+.btn.small{padding:.35em .7em; font-size:.85rem; border-radius:8px}
+.btn.big{font-size:1.25rem; padding:.8em 1.5em; border-radius:14px}
+kbd{font-family:var(--body); font-size:.75em; border:1px solid currentColor; border-radius:5px; padding:0 .35em; opacity:.7}
+
+/* Main grid */
+.main{display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:18px; align-items:start}
+@media (max-width:980px){ .main{grid-template-columns:minmax(0,1fr)} }
+
+/* Stage */
+.stage-col{display:flex; flex-direction:column; gap:12px; min-width:0}
+.stage{position:relative; width:100%; aspect-ratio:16/9; max-width:100%; border-radius:18px; overflow:hidden; background:#000;
+  box-shadow:0 0 0 1px var(--line), 0 30px 80px -30px rgba(0,0,0,.8)}
+.stage #yt, .stage iframe{position:absolute; inset:0; width:100%; height:100%; border:0}
+.curtain{position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; gap:clamp(10px,2vw,22px); padding:4%;
+  background:
+    radial-gradient(circle at 50% 120%, rgba(255,122,26,.35), transparent 55%),
+    repeating-conic-gradient(from 0deg at 50% 50%, rgba(246,168,33,.06) 0 10deg, transparent 10deg 20deg),
+    linear-gradient(180deg, var(--night-3), var(--night));
+  transition:opacity .45s ease}
+.curtain.lifted{opacity:0; pointer-events:none}
+.eyebrow{text-transform:uppercase; letter-spacing:.18em; font-weight:700; font-size:clamp(.7rem,1.1vw,.95rem); color:var(--diya)}
+.headline{font-family:var(--display); font-weight:400; font-size:clamp(2rem,6vw,5.2rem); line-height:1; margin:0; text-wrap:balance}
+.sub{font-size:clamp(1rem,1.8vw,1.5rem); color:var(--muted); margin:0; text-wrap:balance}
+.chip{display:inline-flex; align-items:center; gap:.4em; border-radius:999px; padding:.25em .8em; font-weight:700; font-size:.8rem; letter-spacing:.08em; text-transform:uppercase; border:1px solid currentColor}
+.chip.Bollywood{color:var(--marigold)} .chip.Hollywood{color:var(--teal)} .chip.Nigerian{color:#7be08a}
+
+.eq{display:flex; gap:clamp(5px,.8vw,10px); align-items:flex-end; height:clamp(60px,12vw,140px)}
+.eq i{width:clamp(10px,1.4vw,18px); border-radius:6px; background:linear-gradient(180deg,var(--diya),var(--saffron)); height:30%; animation:bounce 1s ease-in-out infinite}
+.eq i:nth-child(2){animation-delay:-.2s}.eq i:nth-child(3){animation-delay:-.5s}.eq i:nth-child(4){animation-delay:-.1s}
+.eq i:nth-child(5){animation-delay:-.7s}.eq i:nth-child(6){animation-delay:-.35s}.eq i:nth-child(7){animation-delay:-.6s}
+@keyframes bounce{0%,100%{height:22%}50%{height:100%}}
+@media (prefers-reduced-motion:reduce){.eq i{animation:none; height:60%}}
+.bar{width:min(520px,80%); height:8px; background:rgba(255,255,255,.12); border-radius:99px; overflow:hidden}
+.bar b{display:block; height:100%; width:0; background:var(--marigold); border-radius:99px}
+
+.count{font-family:var(--display); font-size:clamp(4rem,14vw,11rem); line-height:.9; color:var(--marigold); font-variant-numeric:tabular-nums; text-shadow:0 0 40px rgba(246,168,33,.45)}
+.count.out{color:var(--rose)}
+
+.lower{position:absolute; left:3%; bottom:5%; max-width:80%; padding:.8em 1.1em; border-radius:14px; background:rgba(16,10,36,.82); backdrop-filter:blur(6px); border:1px solid var(--line); transition:opacity .3s}
+.lower h2{font-family:var(--display); font-weight:400; margin:0 0 .15em; font-size:clamp(1.3rem,3vw,2.6rem); line-height:1.05}
+.lower p{margin:0; color:var(--diya); font-size:clamp(.95rem,1.6vw,1.35rem); font-weight:600}
+.lower .chip{margin-top:.5em}
+
+.alert{position:absolute; inset:auto 3% 5% 3%; padding:1em 1.2em; border-radius:14px; background:rgba(60,10,20,.92); border:1px solid var(--danger); text-align:left}
+.alert strong{color:var(--danger)}
+.alert a{color:var(--diya)}
+
+.controls{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+.controls .spacer{flex:1}
+.hint{color:var(--muted); font-size:.85rem}
+
+/* Scoreboard */
+.board{display:flex; flex-direction:column; gap:10px; min-width:0}
+.board h3{margin:0; font-family:var(--display); font-weight:400; font-size:1.4rem}
+.team{display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:4px 10px; padding:12px 14px; border-radius:14px; background:var(--night-2); border:1px solid var(--line); transition:border-color .3s, box-shadow .3s}
+.team.turn{border-color:var(--marigold); box-shadow:0 0 0 1px var(--marigold), 0 10px 30px -14px rgba(246,168,33,.8)}
+.team .nm{font-weight:700; font-size:1.1rem; overflow-wrap:anywhere}
+.team .tag{grid-column:1; font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--marigold); font-weight:700}
+.team .sc{grid-row:1 / span 2; grid-column:2; font-family:var(--display); font-size:2.6rem; line-height:1; font-variant-numeric:tabular-nums; min-width:1.4em; text-align:right}
+.team .pts{grid-column:1 / -1; display:flex; gap:6px; flex-wrap:wrap; margin-top:4px}
+.rules{font-size:.85rem; color:var(--muted); line-height:1.5; padding:12px 14px; border-radius:14px; border:1px dashed var(--line)}
+.rules b{color:var(--ink)}
+
+/* Setup drawer */
+.drawer{position:fixed; top:0; right:0; bottom:0; width:min(640px,100%); background:var(--night-2); border-left:1px solid var(--line); box-shadow:-30px 0 80px -20px rgba(0,0,0,.7);
+  transform:translateX(105%); transition:transform .35s ease; z-index:20; display:flex; flex-direction:column;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); padding-right:env(safe-area-inset-right,0px)}
+.drawer.open{transform:none}
+.drawer header{padding:16px 18px 12px; border-bottom:1px solid var(--line); display:flex; gap:10px; align-items:flex-start}
+.drawer header h2{margin:0; font-family:var(--display); font-weight:400; font-size:1.6rem}
+.drawer header p{margin:.2em 0 0; color:var(--rose); font-size:.85rem; font-weight:600}
+.drawer .scroll{overflow-y:auto; padding:14px 18px 40px; display:flex; flex-direction:column; gap:18px}
+.sec h4{margin:0 0 8px; text-transform:uppercase; letter-spacing:.14em; font-size:.75rem; color:var(--diya)}
+.row{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+.field{display:flex; flex-direction:column; gap:3px; min-width:0}
+.field label{font-size:.72rem; color:var(--muted); font-weight:600; letter-spacing:.04em}
+.in{background:var(--night); border:1px solid var(--line); border-radius:8px; padding:.4em .6em; min-width:0; width:100%}
+.in.t{width:4.6em; text-align:center; font-variant-numeric:tabular-nums}
+.song{border:1px solid var(--line); border-radius:14px; padding:12px; display:grid; gap:10px; background:var(--night)}
+.song.bad{border-color:var(--danger)}
+.song .head{display:grid; grid-template-columns:2rem minmax(0,1fr) minmax(0,1fr); gap:8px; align-items:end}
+.song .num{font-family:var(--display); font-size:1.3rem; color:var(--marigold); text-align:center; padding-bottom:.2em}
+.song .meta{display:grid; grid-template-columns:5em 8.5em minmax(0,1fr); gap:8px}
+.timing{display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end}
+.tgrp{display:flex; flex-direction:column; gap:3px}
+.tgrp .ctl{display:flex; gap:4px; align-items:center}
+.nudge{width:1.9em; height:1.9em; border-radius:7px; border:1px solid var(--line); background:var(--night-2); padding:0; font-weight:700}
+.status{font-size:.8rem; font-weight:600}
+.status.ok{color:var(--teal)} .status.err{color:var(--danger)}
+.song .acts{display:flex; gap:6px; flex-wrap:wrap; align-items:center}
+.song .acts a{color:var(--diya); font-size:.85rem}
+textarea.in{min-height:120px; font-family:ui-monospace,Menlo,monospace; font-size:.8rem}
+.banner{border:1px solid var(--marigold); background:rgba(246,168,33,.1); border-radius:12px; padding:10px 14px; font-size:.92rem; line-height:1.5}
+.banner code{background:rgba(0,0,0,.35); padding:.1em .4em; border-radius:5px}
+.toast{position:fixed; left:50%; bottom:calc(20px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%); background:var(--night-3); border:1px solid var(--line); padding:.6em 1.1em; border-radius:10px; z-index:40; font-weight:600}
+@media (max-width:560px){ .song .meta{grid-template-columns:1fr 1fr} .song .meta .field:last-child{grid-column:1/-1} .song .head{grid-template-columns:2rem minmax(0,1fr)} .song .head .field:last-child{grid-column:2} }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top">
+    <div class="brand">
+      <svg class="diya" viewBox="0 0 40 40" aria-hidden="true">
+        <path d="M20 4c4 6 6 9 6 12a6 6 0 0 1-12 0c0-3 2-6 6-12z" fill="#ffd889"/>
+        <path d="M20 9c2 3.5 3 5.5 3 7a3 3 0 0 1-6 0c0-1.5 1-3.5 3-7z" fill="#ff7a1a"/>
+        <path d="M4 24h32c-1.5 7-8 11-16 11S5.5 31 4 24z" fill="#f6a821"/>
+        <path d="M4 24h32" stroke="#c4561a" stroke-width="2"/>
+      </svg>
+      <h1>Diwali <span>Antakshari</span></h1>
+    </div>
+    <span class="counter" id="counter"></span>
+    <button class="btn" id="btnShuffle" type="button" title="Shuffle the song order">Shuffle</button>
+    <button class="btn" id="btnFull" type="button">Fullscreen</button>
+    <button class="btn" id="btnSetup" type="button">Host setup <kbd>S</kbd></button>
+  </div>
+
+  <div class="banner" id="fileBanner" hidden>
+    YouTube usually refuses to play videos in a page opened straight from a file. In Terminal, go to the folder with this file and run
+    <code>python3 -m http.server 8000</code>, then open <code>http://localhost:8000/antakshari.html</code> in Chrome.
+  </div>
+
+  <div class="main">
+    <div class="stage-col">
+      <div class="stage" id="stage">
+        <div id="yt"></div>
+        <div class="curtain" id="curtain"></div>
+        <div class="lower" id="lower" hidden></div>
+        <div class="alert" id="alert" hidden></div>
+      </div>
+      <div class="controls" id="controls"></div>
+    </div>
+
+    <aside class="board">
+      <h3>Scoreboard</h3>
+      <div id="teams" class="board"></div>
+      <div class="rules">
+        <b>How a round works.</b> The team on turn hears a 10 to 15 second clip with the screen hidden. When it stops, they sing what comes next. Then reveal the film scene to check.
+        Suggested scoring: <b>+1</b> for singing the next line, <b>+1</b> for naming the film.
+        <br><br>Keys: <kbd>Space</kbd> next step, <kbd>R</kbd> replay clip, <kbd>←</kbd> <kbd>→</kbd> previous or next song.
+      </div>
+    </aside>
+  </div>
+</div>
+
+<aside class="drawer" id="drawer" aria-label="Host setup">
+  <header>
+    <div style="flex:1">
+      <h2>Host setup</h2>
+      <p>Answers are visible here. Keep this closed while guests can see the screen.</p>
+    </div>
+    <button class="btn" id="btnClose" type="button">Done</button>
+  </header>
+  <div class="scroll">
+    <section class="sec">
+      <h4>Teams</h4>
+      <div id="teamEdit" class="row"></div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn small" id="addTeam" type="button">Add team</button>
+        <button class="btn small" id="resetScores" type="button">Reset scores</button>
+        <div class="field" style="flex-direction:row; align-items:center; gap:8px; margin-left:auto">
+          <label for="singSecs" style="font-size:.85rem">Singing time (sec)</label>
+          <input class="in t" id="singSecs" type="number" min="5" max="90">
+        </div>
+      </div>
+    </section>
+
+    <section class="sec">
+      <h4>Rehearse each song</h4>
+      <p class="hint" style="margin:0 0 10px">Times are rough guesses. For each song, press <b>Test clip</b> and watch the stage. Use <b>Set to now</b> while it plays, or the − and + buttons, until the clip stops right before a line people will know. The reveal plays on from the pause point.</p>
+      <div id="songList" style="display:flex; flex-direction:column; gap:12px"></div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn small" id="addSong" type="button">Add a song</button>
+      </div>
+    </section>
+
+    <section class="sec">
+      <h4>Save or restore the setlist</h4>
+      <p class="hint" style="margin:0 0 8px">Your edits are kept in this browser automatically. To move them to another computer, copy this text and paste it there.</p>
+      <textarea class="in" id="json" spellcheck="false"></textarea>
+      <div class="row" style="margin-top:8px">
+        <button class="btn small" id="copyJson" type="button">Copy</button>
+        <button class="btn small" id="loadJson" type="button">Load pasted setlist</button>
+        <button class="btn small ghost" id="resetAll" type="button" style="margin-left:auto">Restore default songs</button>
+      </div>
+      <div class="row" id="confirmReset" hidden style="margin-top:8px">
+        <span class="hint">This replaces every song and timing with the defaults.</span>
+        <button class="btn small" id="confirmYes" type="button">Restore defaults</button>
+        <button class="btn small ghost" id="confirmNo" type="button">Keep my songs</button>
+      </div>
+    </section>
+  </div>
+</aside>
+
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const DEFAULT_SONGS = [
+  {id:'b1', title:'Tujhe Dekha To',          film:'Dilwale Dulhania Le Jayenge',  year:1995, cat:'Bollywood', vid:'cNV5hLSa9H8', start:30,  pause:44,  reveal:25},
+  {id:'b2', title:'Chaiyya Chaiyya',         film:'Dil Se..',                     year:1998, cat:'Bollywood', vid:'T8_k-g1NQgA', start:62,  pause:76,  reveal:25},
+  {id:'b3', title:'Kal Ho Naa Ho',           film:'Kal Ho Naa Ho',                year:2003, cat:'Bollywood', vid:'g0eO74UmRBs', start:24,  pause:38,  reveal:25},
+  {id:'b4', title:'Kajra Re',                film:'Bunty Aur Babli',              year:2005, cat:'Bollywood', vid:'4dsFQFCvVGU', start:150, pause:164, reveal:25},
+  {id:'b5', title:'Badtameez Dil',           film:'Yeh Jawaani Hai Deewani',      year:2013, cat:'Bollywood', vid:'II2EO3Nw4m0', start:38,  pause:52,  reveal:25},
+  {id:'b6', title:'London Thumakda',         film:'Queen',                        year:2014, cat:'Bollywood', vid:'udra3Mfw2oo', start:22,  pause:36,  reveal:25},
+  {id:'b7', title:'Kesariya',                film:'Brahmāstra: Part One – Shiva', year:2022, cat:'Bollywood', vid:'BddP6PYo2gs', start:50,  pause:64,  reveal:25},
+  {id:'h1', title:'Bye Bye Bye',             film:'Deadpool & Wolverine (opening scene)', year:2024, cat:'Hollywood', vid:'Ytv-C_FELuM', start:55, pause:69, reveal:30},
+  {id:'h2', title:'Running Up That Hill',    film:'Stranger Things, Season 4',    year:2022, cat:'Hollywood', vid:'mSXxPBQmPAw', start:60,  pause:74,  reveal:30},
+  {id:'h3', title:'Golden',                  film:'KPop Demon Hunters',           year:2025, cat:'Hollywood', vid:'LBErnXPn1kY', start:25,  pause:39,  reveal:30},
+  {id:'h5', title:'Sunflower',               film:'Spider-Man: Into the Spider-Verse', year:2018, cat:'Hollywood', vid:'E_Ct2cKQnkE', start:10, pause:24, reveal:30},
+  {id:'h6', title:'Defying Gravity',         film:'Wicked',                       year:2024, cat:'Hollywood', vid:'LLCzHIKj67U', start:120, pause:134, reveal:30},
+  {id:'h7', title:'Shallow',                 film:'A Star Is Born',               year:2018, cat:'Hollywood', vid:'bo_efYhYU2A', start:30,  pause:44,  reveal:30},
+  {id:'h8', title:'See You Again',           film:'Furious 7',                    year:2015, cat:'Hollywood', vid:'RgKAFK5djSk', start:5,   pause:19,  reveal:30},
+  {id:'h9',  title:'All Star',               film:'Shrek (opening scene)',        year:2001, cat:'Hollywood', vid:'P6antjcBFZ4', start:22,  pause:36,  reveal:30},
+  {id:'h10', title:'Dancing Queen',          film:'Mamma Mia!',                   year:2008, cat:'Hollywood', vid:'QRoWiTcO7dk', start:50,  pause:64,  reveal:30},
+  {id:'h11', title:"Can't Stop the Feeling!", film:'Trolls',                      year:2016, cat:'Hollywood', vid:'9hPgjW2ou9E', start:30,  pause:44,  reveal:30},
+  {id:'h12', title:'Mr. Blue Sky',           film:'Guardians of the Galaxy Vol. 2 (opening scene)', year:2017, cat:'Hollywood', vid:'DfNSBeFliIg', start:20, pause:34, reveal:30},
+  {id:'b8',  title:'Hawa Hawai',             film:'Mr. India',                    year:1987, cat:'Bollywood', vid:'IgKdXLfxgQQ', start:40,  pause:54,  reveal:25},
+  {id:'b9',  title:'Ek Ladki Ko Dekha',      film:'1942: A Love Story',           year:1994, cat:'Bollywood', vid:'fTauOK8J-U8', start:8,   pause:20,  reveal:25},
+  {id:'b10', title:'Chunnari Chunnari',      film:'Biwi No. 1',                   year:1999, cat:'Bollywood', vid:'6z1U-kJ3xJE', start:30,  pause:44,  reveal:25},
+  {id:'b11', title:'Lungi Dance',            film:'Chennai Express',              year:2013, cat:'Bollywood', vid:'fbwCgt1hMD4', start:30,  pause:44,  reveal:25},
+  {id:'b12', title:'Kala Chashma',           film:'Baar Baar Dekho',              year:2016, cat:'Bollywood', vid:'4WRJHbL4dAk', start:45,  pause:59,  reveal:25},
+  {id:'b13', title:'What Jhumka?',           film:'Rocky Aur Rani Kii Prem Kahaani', year:2023, cat:'Bollywood', vid:'P1fIdFRnfqw', start:40, pause:54, reveal:25},
+  {id:'n2', title:'Assurance (Davido)',       film:'Coming 2 America (wedding scene)', year:2021, cat:'Nigerian', vid:'RO9l_tvFyNU', start:20, pause:34, reveal:30},
+  {id:'n3', title:'African Queen (2Baba)',    film:'Phat Girlz',                   year:2006, cat:'Nigerian',  vid:'kLr8QBbaEzs', start:30,  pause:44,  reveal:30},
+  {id:'h13', title:'Secret (Pretty Little Liars theme)', film:'Pretty Little Liars (opening credits)', year:2010, cat:'Hollywood', vid:'I6Y7Dqzu990', start:0, pause:7, reveal:18},
+  {id:'n1', title:'Brown Skin Girl (with Wizkid)', film:'Black Is King',          year:2020, cat:'Nigerian',  vid:'vRFS0MYTC1I', start:45,  pause:59,  reveal:30},
+];
+const DEFAULT_ORDER = ['h7','b2','h1','b8','b11','h10','h8','h11','b9','b3','b7','h13','b6','b12','n1','b13','n3','h9','h3','n2','h6','b5','h2','b4','b10','h5','b1','h12'];
+const STORE = 'diwali-antakshari-v4';
+const OLD_STORES = ['diwali-antakshari-v3','diwali-antakshari-v2'];
+
+const $ = s => document.querySelector(s);
+const clone = o => JSON.parse(JSON.stringify(o));
+
+function defaults(){
+  return { songs: clone(DEFAULT_SONGS), order: DEFAULT_ORDER.slice(),
+    teams:[{name:'Team Diya',score:0},{name:'Team Rangoli',score:0}], singSecs:20, pos:0, turn:0 };
+}
+function load(){ try{ const raw = localStorage.getItem(STORE); return raw ? JSON.parse(raw) : null; }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem(STORE, JSON.stringify(state)); }catch(e){} }
+
+function migrate(){
+  try{ let raw = null; for(const k of OLD_STORES){ raw = localStorage.getItem(k); if(raw) break; } if(!raw) return null; const old = JSON.parse(raw);
+    old.songs = (old.songs||[]).filter(s=>s.id!=='h4');
+    const have = new Set(old.songs.map(s=>s.id));
+    DEFAULT_SONGS.forEach(s=>{ if(!have.has(s.id)) old.songs.push(clone(s)); });
+    old.order = DEFAULT_ORDER.filter(id=>old.songs.some(s=>s.id===id)); old.pos = 0; old.turn = 0;
+    return old; }catch(e){ return null; } }
+let state = load() || migrate() || defaults();
+normalize();
+function normalize(){
+  const ids = state.songs.map(s=>s.id);
+  state.order = (state.order||[]).filter(id=>ids.includes(id));
+  ids.forEach(id=>{ if(!state.order.includes(id)) state.order.push(id); });
+  if(!state.teams || !state.teams.length) state.teams = defaults().teams;
+  state.pos = Math.min(Math.max(0, state.pos|0), state.order.length);
+  state.turn = (state.turn|0) % state.teams.length;
+  if(!state.singSecs) state.singSecs = 20;
+}
+
+/* ---------- helpers ---------- */
+function fmt(s){ s = Math.max(0, +s||0); const m = Math.floor(s/60); const r = s - m*60;
+  const sec = Number.isInteger(r) ? String(r).padStart(2,'0') : r.toFixed(1).padStart(4,'0'); return m+':'+sec; }
+function parseT(v){ v = String(v).trim(); if(!v) return NaN;
+  if(v.includes(':')){ const [m,s] = v.split(':'); return (+m)*60 + (+s); } return +v; }
+function parseVid(v){ v = String(v||'').trim();
+  const m = v.match(/(?:v=|youtu\.be\/|embed\/|shorts\/|live\/)([A-Za-z0-9_-]{11})/); if(m) return m[1];
+  if(/^[A-Za-z0-9_-]{11}$/.test(v)) return v; return ''; }
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function current(){ const id = state.order[state.pos]; return state.songs.find(s=>s.id===id); }
+let toastT;
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(()=>t.hidden=true, 2200); }
+
+if(location.protocol === 'file:') $('#fileBanner').hidden = false;
+
+/* ---------- YouTube player ---------- */
+let player = null, playerReady = false, watch = null, stopAt = null, onStop = null;
+const errors = {}; // vid -> code
+window.onYouTubeIframeAPIReady = function(){
+  const vars = {controls:0, disablekb:1, rel:0, playsinline:1, iv_load_policy:3, fs:0, modestbranding:1};
+  if(location.protocol.startsWith('http')) vars.origin = location.origin;
+  player = new YT.Player('yt', { width:'100%', height:'100%', playerVars:vars,
+    events:{ onReady:()=>{ playerReady = true; cueCurrent(); }, onError:onPlayerError } });
+};
+const HOW_TO_OPEN = 'Refresh the page and check the internet connection. YouTube won’t play inside the Claude app’s file preview or from a double-clicked file, so open the page from its web address.';
+setTimeout(()=>{ if(!playerReady){ showAlert('<strong>YouTube’s player didn’t start.</strong> '+HOW_TO_OPEN); } }, 8000);
+(function(){ const s = document.createElement('script'); s.src = 'https://www.youtube.com/iframe_api';
+  s.onerror = ()=>showAlert('<strong>YouTube didn’t load.</strong> Check the internet connection and refresh the page.'); document.head.appendChild(s); })();
+
+function clearWatch(){ if(watch){ clearInterval(watch); watch = null; } stopAt = null; onStop = null; }
+function loadedVid(){ try{ return player.getVideoData().video_id; }catch(e){ return ''; } }
+function playSegment(vid, from, to, cb, onTick){
+  if(!playerReady){ showAlert('<strong>YouTube’s player isn’t ready.</strong> If this keeps happening: '+HOW_TO_OPEN); return false; }
+  if(!vid){ showAlert('<strong>No YouTube link for this song.</strong> Open Host setup and paste one.'); return false; }
+  clearWatch(); hideAlert();
+  if(loadedVid() === vid){ player.seekTo(from, true); player.playVideo(); }
+  else player.loadVideoById({videoId:vid, startSeconds:from});
+  stopAt = to; onStop = cb;
+  watch = setInterval(()=>{
+    let t = 0; try{ t = player.getCurrentTime() || 0; }catch(e){}
+    if(onTick) onTick(t);
+    if(stopAt != null && t >= stopAt){ player.pauseVideo(); const c = onStop; clearWatch(); if(c) c(); }
+  }, 80);
+  return true;
+}
+function cueCurrent(){
+  const s = current(); if(!playerReady || !s || !s.vid) return;
+  if(loadedVid() !== s.vid){ try{ player.cueVideoById({videoId:s.vid, startSeconds:s.start}); }catch(e){} }
+}
+function onPlayerError(e){
+  clearWatch(); stopSing();
+  const s = current(); const code = e.data;
+  const vid = loadedVid() || (s && s.vid);
+  if(vid) errors[vid] = code;
+  const why = (code===101||code===150) ? 'The uploader doesn’t allow this video to play outside YouTube.'
+    : (code===100) ? 'This video was removed or made private.'
+    : (code===153||code===152) ? 'YouTube needs the page served from a web address. Use the localhost tip at the top of the page.'
+    : 'YouTube couldn’t play this video (error '+code+').';
+  const q = s ? encodeURIComponent(s.title+' '+s.film+' song scene') : '';
+  showAlert('<strong>This video won’t play here.</strong> '+why+' Open Host setup and paste a different upload'+
+    (s ? ', for example from <a href="https://www.youtube.com/results?search_query='+q+'" target="_blank" rel="noopener">this YouTube search</a>.' : '.'));
+  if(phase==='listening') { phase='ready'; renderStage(); }
+  renderSongStatus();
+}
+function showAlert(html){ const a = $('#alert'); a.innerHTML = html; a.hidden = false; }
+function hideAlert(){ $('#alert').hidden = true; }
+
+/* ---------- game flow ---------- */
+let phase = 'ready'; // ready | listening | sing | reveal | done
+let singLeft = 0, singTimer = null;
+
+function startClip(){
+  const s = current(); if(!s) return;
+  phase = 'listening'; renderStage();
+  const ok = playSegment(s.vid, s.start, s.pause, ()=>{ phase = 'sing'; startSing(); renderStage(); },
+    t=>{ const b = document.querySelector('#curtain .bar b'); if(b) b.style.width = Math.min(100, Math.max(0, (t-s.start)/(s.pause-s.start)*100))+'%'; });
+  if(!ok){ phase = 'ready'; renderStage(); }
+}
+function startSing(){ stopSing(); singLeft = state.singSecs; singTimer = setInterval(()=>{ singLeft--; const c = $('#curtain .count');
+  if(c){ c.textContent = singLeft > 0 ? singLeft : 'Time!'; c.classList.toggle('out', singLeft<=5); } if(singLeft<=0) stopSing(); }, 1000); }
+function stopSing(){ if(singTimer){ clearInterval(singTimer); singTimer = null; } }
+function reveal(){
+  const s = current(); if(!s) return;
+  stopSing(); phase = 'reveal'; renderStage();
+  playSegment(s.vid, s.pause, s.pause + (+s.reveal||20), ()=>{});
+}
+function keepPlaying(){ clearWatch(); try{ player.playVideo(); }catch(e){} }
+function go(delta){
+  clearWatch(); stopSing(); hideAlert();
+  try{ player && playerReady && player.pauseVideo(); }catch(e){}
+  const n = state.pos + delta;
+  state.pos = Math.min(Math.max(0, n), state.order.length);
+  if(delta > 0) state.turn = (state.turn + 1) % state.teams.length;
+  if(delta < 0) state.turn = (state.turn - 1 + state.teams.length) % state.teams.length;
+  phase = state.pos >= state.order.length ? 'done' : 'ready';
+  save(); renderAll(); cueCurrent();
+}
+function mainAction(){
+  if(drawerOpen()) return;
+  if(phase==='ready') startClip();
+  else if(phase==='sing' || phase==='listening') reveal();
+  else if(phase==='reveal') go(1);
+}
+
+/* ---------- rendering ---------- */
+function renderAll(){ renderCounter(); renderStage(); renderTeams(); }
+function renderCounter(){
+  const n = state.order.length;
+  $('#counter').textContent = state.pos < n ? 'Song '+(state.pos+1)+' of '+n : 'Playlist finished';
+}
+function teamOnTurn(){ return state.teams[state.turn] ? state.teams[state.turn].name : ''; }
+
+function renderStage(){
+  const c = $('#curtain'), lower = $('#lower'), ctr = $('#controls');
+  const s = current(); const setup = drawerOpen();
+  c.classList.toggle('lifted', setup || phase==='reveal');
+  lower.hidden = !(phase==='reveal' && s && !setup);
+  if(s && phase==='reveal'){
+    lower.innerHTML = '<h2>'+esc(s.title)+'</h2><p>'+esc(s.film)+' ('+esc(s.year)+')</p><span class="chip '+esc(s.cat)+'">'+esc(s.cat)+'</span>';
+  }
+  const team = esc(teamOnTurn());
+  if(phase==='done'){
+    const best = Math.max(...state.teams.map(t=>t.score));
+    const winners = state.teams.filter(t=>t.score===best).map(t=>esc(t.name));
+    c.innerHTML = '<div class="eyebrow">Shubh Deepavali</div><h2 class="headline">'+(winners.length>1?'It’s a tie!':winners[0]+' wins!')+'</h2>'+
+      '<p class="sub">'+(winners.length>1? winners.join(' and ')+' share the lights with '+best+' points.' : 'With '+best+' points. Pass the mithai.')+'</p>';
+    ctr.innerHTML = '<button class="btn" type="button" data-act="prev">← Back one song</button><span class="spacer"></span>'+
+      '<button class="btn" type="button" data-act="restart">Play the list again</button>';
+    return;
+  }
+  if(!s){ c.innerHTML = '<h2 class="headline">Add some songs</h2><p class="sub">Open Host setup to build the playlist.</p>'; ctr.innerHTML=''; return; }
+  const chip = '<span class="chip '+esc(s.cat)+'">'+esc(s.cat)+'</span>';
+  if(phase==='ready'){
+    c.innerHTML = '<div class="eyebrow">Song '+(state.pos+1)+' · '+team+'’s turn</div><h2 class="headline">Listen closely</h2>'+chip+
+      '<button class="btn primary big" type="button" data-act="play">▶ Play the clip</button><p class="sub" style="font-size:1rem">or press <kbd>Space</kbd></p>';
+    ctr.innerHTML = '<button class="btn" type="button" data-act="prev">← Previous</button><button class="btn" type="button" data-act="next">Skip →</button>'+
+      '<span class="spacer"></span><span class="hint">The screen stays hidden while the clip plays.</span>';
+  } else if(phase==='listening'){
+    c.innerHTML = '<div class="eyebrow">'+team+', get ready to sing</div><div class="eq"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="bar"><b></b></div>';
+    ctr.innerHTML = '<span class="hint">Playing the clip…</span><span class="spacer"></span><button class="btn" type="button" data-act="reveal">Reveal now</button>';
+  } else if(phase==='sing'){
+    c.innerHTML = '<div class="eyebrow">'+team+'</div><h2 class="headline">Sing what comes next!</h2><div class="count">'+state.singSecs+'</div>';
+    ctr.innerHTML = '<button class="btn" type="button" data-act="replay">↺ Replay clip <kbd>R</kbd></button><span class="spacer"></span>'+
+      '<button class="btn primary big" type="button" data-act="reveal">Reveal the scene <kbd>Space</kbd></button>';
+  } else if(phase==='reveal'){
+    c.innerHTML = '';
+    ctr.innerHTML = '<button class="btn" type="button" data-act="replay">↺ Replay clip</button><button class="btn" type="button" data-act="more">Keep playing</button>'+
+      '<span class="spacer"></span><span class="hint">Award points on the right.</span><button class="btn primary" type="button" data-act="next">Next song → <kbd>Space</kbd></button>';
+  }
+}
+function renderTeams(){
+  const box = $('#teams'); box.innerHTML = '';
+  state.teams.forEach((t,i)=>{
+    const d = document.createElement('div'); d.className = 'team'+(i===state.turn && phase!=='done' ? ' turn' : '');
+    d.innerHTML = '<div class="nm">'+esc(t.name)+'</div><div class="tag">'+(i===state.turn && phase!=='done' ? 'On turn' : '&nbsp;')+'</div>'+
+      '<div class="sc">'+t.score+'</div><div class="pts"><button class="btn small" type="button" data-pt="1" data-i="'+i+'">+1</button>'+
+      '<button class="btn small" type="button" data-pt="2" data-i="'+i+'">+2</button><button class="btn small ghost" type="button" data-pt="-1" data-i="'+i+'">−1</button>'+
+      (i!==state.turn ? '<button class="btn small ghost" type="button" data-turn="'+i+'">Give turn</button>' : '')+'</div>';
+    box.appendChild(d);
+  });
+}
+$('#teams').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  if(b.dataset.pt){ const t = state.teams[+b.dataset.i]; t.score = Math.max(0, t.score + (+b.dataset.pt)); }
+  if(b.dataset.turn){ state.turn = +b.dataset.turn; renderStage(); }
+  save(); renderTeams();
+});
+$('#controls').addEventListener('click', e=>{ const b = e.target.closest('button'); if(b) act(b.dataset.act); });
+$('#curtain').addEventListener('click', e=>{ const b = e.target.closest('button'); if(b) act(b.dataset.act); });
+function act(a){
+  if(a==='play') startClip();
+  else if(a==='replay'){ phase='ready'; startClip(); }
+  else if(a==='reveal') reveal();
+  else if(a==='more') keepPlaying();
+  else if(a==='next') go(1);
+  else if(a==='prev') go(-1);
+  else if(a==='restart'){ state.pos = 0; state.turn = 0; phase='ready'; save(); renderAll(); cueCurrent(); }
+}
+
+/* ---------- top bar ---------- */
+$('#btnShuffle').onclick = ()=>{
+  const o = state.order.slice(); for(let i=o.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [o[i],o[j]] = [o[j],o[i]]; }
+  state.order = o; state.pos = 0; phase='ready'; clearWatch(); stopSing(); save(); renderAll(); renderSongs(); cueCurrent(); toast('Song order shuffled. Starting from song 1.');
+};
+$('#btnFull').onclick = ()=>{ const el = document.documentElement;
+  if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); else if(el.requestFullscreen) el.requestFullscreen().catch(()=>toast('Fullscreen is blocked here. In Chrome press Cmd+Ctrl+F instead.')); else toast('In Chrome press Cmd+Ctrl+F for fullscreen.'); };
+
+/* ---------- setup drawer ---------- */
+function drawerOpen(){ return $('#drawer').classList.contains('open'); }
+function openDrawer(v){
+  $('#drawer').classList.toggle('open', v);
+  if(v){ clearWatch(); stopSing(); try{ player && playerReady && player.pauseVideo(); }catch(e){} if(phase==='listening'||phase==='sing') phase='ready';
+    renderSetup(); }
+  renderStage();
+}
+$('#btnSetup').onclick = ()=>openDrawer(!drawerOpen());
+$('#btnClose').onclick = ()=>{ openDrawer(false); cueCurrent(); };
+
+function renderSetup(){ renderTeamEdit(); $('#singSecs').value = state.singSecs; renderSongs(); $('#json').value = JSON.stringify({songs:state.songs, order:state.order}, null, 1); }
+function renderTeamEdit(){
+  const box = $('#teamEdit'); box.innerHTML = '';
+  state.teams.forEach((t,i)=>{
+    const w = document.createElement('div'); w.className='row'; w.style.flex='1 1 45%';
+    w.innerHTML = '<input class="in" id="team-'+i+'" aria-label="Team '+(i+1)+' name" value="'+esc(t.name)+'">'+
+      (state.teams.length>2 ? '<button class="btn small ghost" type="button" data-rm="'+i+'">Remove</button>' : '');
+    box.appendChild(w);
+  });
+}
+$('#teamEdit').addEventListener('input', e=>{ const m = e.target.id.match(/^team-(\d+)/); if(m){ state.teams[+m[1]].name = e.target.value || 'Team '+(+m[1]+1); save(); renderTeams(); } });
+$('#teamEdit').addEventListener('click', e=>{ const b = e.target.closest('[data-rm]'); if(!b) return; state.teams.splice(+b.dataset.rm,1); state.turn = state.turn % state.teams.length; save(); renderTeamEdit(); renderTeams(); });
+$('#addTeam').onclick = ()=>{ if(state.teams.length>=6) return toast('Six teams is the most this board fits.');
+  const names = ['Team Diya','Team Rangoli','Team Phuljhadi','Team Mithai','Team Kandil','Team Lakshmi'];
+  state.teams.push({name: names.find(n=>!state.teams.some(t=>t.name===n)) || 'Team '+(state.teams.length+1), score:0}); save(); renderTeamEdit(); renderTeams(); };
+$('#resetScores').onclick = ()=>{ state.teams.forEach(t=>t.score=0); save(); renderTeams(); toast('Scores reset to zero.'); };
+$('#singSecs').addEventListener('change', e=>{ const v = Math.round(+e.target.value); if(v>=5 && v<=90){ state.singSecs = v; save(); } else e.target.value = state.singSecs; });
+
+function renderSongs(){
+  const box = $('#songList'); box.innerHTML = '';
+  state.order.forEach((id, idx)=>{
+    const s = state.songs.find(x=>x.id===id); if(!s) return;
+    const d = document.createElement('div'); d.className = 'song'+(errors[s.vid] ? ' bad' : ''); d.dataset.id = s.id;
+    const p = 's-'+s.id+'-';
+    d.innerHTML =
+      '<div class="head"><div class="num">'+(idx+1)+'</div>'+
+        '<div class="field"><label for="'+p+'title">Song</label><input class="in" id="'+p+'title" data-k="title" value="'+esc(s.title)+'"></div>'+
+        '<div class="field"><label for="'+p+'film">Film or show</label><input class="in" id="'+p+'film" data-k="film" value="'+esc(s.film)+'"></div></div>'+
+      '<div class="meta">'+
+        '<div class="field"><label for="'+p+'year">Year</label><input class="in" id="'+p+'year" data-k="year" inputmode="numeric" value="'+esc(s.year)+'"></div>'+
+        '<div class="field"><label for="'+p+'cat">Category</label><select class="in" id="'+p+'cat" data-k="cat">'+
+          ['Bollywood','Hollywood','Nigerian','Other'].map(c=>'<option'+(c===s.cat?' selected':'')+'>'+c+'</option>').join('')+'</select></div>'+
+        '<div class="field"><label for="'+p+'vid">YouTube link</label><input class="in" id="'+p+'vid" data-k="vid" placeholder="Paste a youtube.com link" value="'+(s.vid?'https://youtu.be/'+esc(s.vid):'')+'"></div></div>'+
+      '<div class="timing">'+
+        tgrp(p,'start','Clip starts',s.start)+tgrp(p,'pause','Clip stops',s.pause)+
+        '<div class="tgrp"><label class="hint" for="'+p+'reveal" style="font-size:.72rem;font-weight:600">Reveal length (sec)</label>'+
+          '<div class="ctl"><input class="in t" id="'+p+'reveal" data-k="reveal" type="number" min="5" max="120" value="'+esc(s.reveal)+'"></div></div></div>'+
+      '<div class="acts">'+
+        '<button class="btn small primary" type="button" data-a="test">▶ Test clip</button>'+
+        '<button class="btn small" type="button" data-a="testReveal">▶ Test reveal</button>'+
+        '<button class="btn small ghost" type="button" data-a="stop">Pause</button>'+
+        '<span class="status '+(errors[s.vid]?'err':'ok')+'" data-status>'+(errors[s.vid]?'Won’t play here (error '+errors[s.vid]+')':(s.vid?'':'No link yet'))+'</span>'+
+        '<span style="flex:1"></span>'+
+        '<a href="https://www.youtube.com/results?search_query='+encodeURIComponent(s.title+' '+s.film+' song')+'" target="_blank" rel="noopener">Find on YouTube</a>'+
+        '<button class="btn small ghost" type="button" data-a="del">Remove</button></div>';
+    box.appendChild(d);
+  });
+  function tgrp(p,k,label,val){
+    return '<div class="tgrp"><label class="hint" for="'+p+k+'" style="font-size:.72rem;font-weight:600">'+label+'</label><div class="ctl">'+
+      '<button class="nudge" type="button" data-n="'+k+'" data-d="-1" aria-label="'+label+' one second earlier">−</button>'+
+      '<input class="in t" id="'+p+k+'" data-k="'+k+'" value="'+fmt(val)+'">'+
+      '<button class="nudge" type="button" data-n="'+k+'" data-d="1" aria-label="'+label+' one second later">+</button>'+
+      '<button class="btn small ghost" type="button" data-now="'+k+'">Set to now</button></div></div>';
+  }
+}
+function renderSongStatus(){ if(drawerOpen()) renderSongs(); }
+function songFromEl(el){ const card = el.closest('.song'); return card ? state.songs.find(s=>s.id===card.dataset.id) : null; }
+
+$('#songList').addEventListener('change', e=>{
+  const k = e.target.dataset.k; const s = songFromEl(e.target); if(!k || !s) return;
+  let v = e.target.value;
+  if(k==='start' || k==='pause'){ const t = parseT(v); if(isNaN(t)){ e.target.value = fmt(s[k]); return toast('Use minutes:seconds, like 1:05.'); } s[k] = Math.round(t*2)/2; e.target.value = fmt(s[k]); }
+  else if(k==='reveal'){ s.reveal = Math.max(5, Math.min(120, Math.round(+v)||20)); e.target.value = s.reveal; }
+  else if(k==='vid'){ const id = parseVid(v); if(v && !id){ toast('That doesn’t look like a YouTube link.'); return; } s.vid = id; delete errors[id]; }
+  else if(k==='year'){ s.year = v.trim(); }
+  else s[k] = v;
+  if(s.pause <= s.start) toast('The clip has to stop after it starts.');
+  save(); $('#json').value = JSON.stringify({songs:state.songs, order:state.order}, null, 1);
+  if(s===current()) renderStage();
+});
+$('#songList').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return; const s = songFromEl(b); if(!s) return;
+  const card = b.closest('.song');
+  if(b.dataset.n){ const k = b.dataset.n; s[k] = Math.max(0, s[k] + (+b.dataset.d)); card.querySelector('[data-k="'+k+'"]').value = fmt(s[k]); save(); return; }
+  if(b.dataset.now){ if(!playerReady || loadedVid()!==s.vid) return toast('Press Test clip for this song first, then set the time while it plays.');
+    const k = b.dataset.now; s[k] = Math.round(player.getCurrentTime()*2)/2; card.querySelector('[data-k="'+k+'"]').value = fmt(s[k]); save(); toast((k==='start'?'Start':'Stop')+' set to '+fmt(s[k])+'.'); return; }
+  const a = b.dataset.a;
+  if(a==='test'){ if(s.pause<=s.start) return toast('Set the stop time after the start time.'); playSegment(s.vid, s.start, s.pause, ()=>toast('Clip stopped here. Guests would sing next.')); }
+  else if(a==='testReveal'){ playSegment(s.vid, s.pause, s.pause + (+s.reveal||20), ()=>{}); }
+  else if(a==='stop'){ clearWatch(); try{ player.pauseVideo(); }catch(e){} }
+  else if(a==='del'){
+    if(card.dataset.confirm){ state.songs = state.songs.filter(x=>x.id!==s.id); normalize(); save(); renderSongs(); renderAll(); }
+    else { card.dataset.confirm = '1'; b.textContent = 'Press again to remove'; setTimeout(()=>{ if(b.isConnected){ delete card.dataset.confirm; b.textContent='Remove'; } }, 3000); }
+  }
+});
+$('#addSong').onclick = ()=>{
+  const id = 'n'+Date.now().toString(36);
+  state.songs.push({id, title:'New song', film:'', year:'', cat:'Bollywood', vid:'', start:30, pause:44, reveal:20});
+  state.order.push(id); save(); renderSongs(); renderCounter();
+  const el = document.getElementById('s-'+id+'-title'); if(el){ el.focus(); el.select(); el.scrollIntoView({block:'center'}); }
+};
+$('#copyJson').onclick = ()=>{ const t = $('#json');
+  navigator.clipboard.writeText(t.value).then(()=>toast('Setlist copied.')).catch(()=>{ t.focus(); t.select(); toast('Press Cmd+C to copy the selected text.'); }); };
+$('#loadJson').onclick = ()=>{
+  try{ const d = JSON.parse($('#json').value); if(!Array.isArray(d.songs)) throw 0;
+    state.songs = d.songs; state.order = Array.isArray(d.order) ? d.order : d.songs.map(s=>s.id); state.pos = 0; phase='ready';
+    normalize(); save(); renderSetup(); renderAll(); toast('Setlist loaded.');
+  }catch(e){ toast('That text isn’t a setlist copied from this page.'); }
+};
+$('#resetAll').onclick = ()=>{ $('#confirmReset').hidden = false; };
+$('#confirmNo').onclick = ()=>{ $('#confirmReset').hidden = true; };
+$('#confirmYes').onclick = ()=>{ const teams = state.teams; state = defaults(); state.teams = teams; phase='ready'; save(); $('#confirmReset').hidden = true; renderSetup(); renderAll(); cueCurrent(); toast('Default songs restored.'); };
+
+/* ---------- keyboard ---------- */
+document.addEventListener('keydown', e=>{
+  const tag = (e.target.tagName||'').toLowerCase();
+  if(tag==='input' || tag==='textarea' || tag==='select') return;
+  if(e.key==='s' || e.key==='S'){ openDrawer(!drawerOpen()); return; }
+  if(e.key==='Escape' && drawerOpen()){ openDrawer(false); return; }
+  if(drawerOpen()) return;
+  if(e.code==='Space'){ e.preventDefault(); mainAction(); }
+  else if(e.key==='r' || e.key==='R'){ if(phase!=='done'){ phase='ready'; startClip(); } }
+  else if(e.key==='ArrowRight') go(1);
+  else if(e.key==='ArrowLeft') go(-1);
+});
+
+if(state.pos >= state.order.length) phase = 'done';
+renderAll();
+</script>
+</body>
+</html>
